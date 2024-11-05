@@ -8,8 +8,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.audio.Sound;
 
 public class Player {
+
+    private Sound walk;
+    private boolean isWalkingSoundPlaying = false;
     private Vector2 position;
     private float speed = 3f;
     private final float PLAYER_WIDTH = 2.5f;
@@ -25,6 +29,7 @@ public class Player {
     private Direction lastDirection = Direction.RIGHT;
 
     public Player(float x, float y) {
+        walk = Gdx.audio.newSound(Gdx.files.internal("Walk.mp3"));
         position = new Vector2(x, y);
         walkRightAnimation = loadAnimation("Walk_Right", 2, false);  // Load right walk animation
         walkLeftAnimation = loadAnimation("Walk_Right", 2, true);    // Load left walk as flipped version of right
@@ -42,12 +47,13 @@ public class Player {
         boolean isMovingHorizontally = false;
         boolean isMovingVertically = false;
 
-        // Horizontal movement and set current frame accordingly
+        // Horizontal movement
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             position.x -= speed * deltaTime;
             currentFrame = walkLeftAnimation.getKeyFrame(stateTime, true);
             lastDirection = Direction.LEFT;
             isMovingHorizontally = true;
+
         } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             position.x += speed * deltaTime;
             currentFrame = walkRightAnimation.getKeyFrame(stateTime, true);
@@ -55,23 +61,34 @@ public class Player {
             isMovingHorizontally = true;
         }
 
-        // Vertical movement, use last horizontal direction's animation
+        // Vertical movement
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             position.y += speed * deltaTime;
             currentFrame = getWalkAnimationForDirection().getKeyFrame(stateTime, true);
             isMovingVertically = true;
+
         } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             position.y -= speed * deltaTime;
             currentFrame = getWalkAnimationForDirection().getKeyFrame(stateTime, true);
             isMovingVertically = true;
         }
 
-        // If no horizontal or vertical movement, use idle animation based on last direction
+        // Check if player is moving and play/stop sound accordingly
+        if ((isMovingHorizontally || isMovingVertically) && !isWalkingSoundPlaying) {
+            walk.loop();// Start or loop the walking sound
+            isWalkingSoundPlaying = true;
+        } else if (!isMovingHorizontally && !isMovingVertically && isWalkingSoundPlaying) {
+            walk.stop();  // Stop the walking sound
+            isWalkingSoundPlaying = false;
+        }
+
+        // Idle animation if not moving
         if (!isMovingHorizontally && !isMovingVertically) {
             currentFrame = (lastDirection == Direction.RIGHT ? idleRightAnimation : idleLeftAnimation)
                 .getKeyFrame(stateTime, true);
         }
     }
+
 
     private Animation<TextureRegion> loadAnimation(String basePath, int frameCount, boolean flipHorizontally) {
         Array<TextureRegion> frames = new Array<>();
@@ -104,6 +121,7 @@ public class Player {
         for (TextureRegion frame : idleLeftAnimation.getKeyFrames()) {
             frame.getTexture().dispose();
         }
+        walk.dispose();
     }
 
     private enum Direction {

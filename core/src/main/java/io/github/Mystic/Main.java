@@ -82,6 +82,7 @@ public class Main implements Screen{
                 {
                         System.out.println("I am being Clicked(play)");
                        click.play();
+                       backgroundMusic.stop();
                         game.setScreen(new Gamemain(game));
                 }
         });
@@ -106,8 +107,9 @@ public class Main implements Screen{
         {
                 public void clicked(InputEvent event,float x,float y)
                 {
-                        Gdx.app.exit();
                         click.play();
+                        Gdx.app.exit();
+
                 }
         });
 

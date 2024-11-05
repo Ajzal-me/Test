@@ -12,8 +12,10 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.audio.Music;
 
 public class Gamemain implements Screen {
+    private Music back;
     private Player player;
     private SpriteBatch batch;
     private OrthographicCamera camera;
@@ -29,6 +31,9 @@ public class Gamemain implements Screen {
         this.game = game;
         batch = new SpriteBatch();
 
+        back = Gdx.audio.newMusic(Gdx.files.internal("Background.mp3"));
+        back.setLooping(true);
+        back.play();
         // Load map
         map = new TmxMapLoader().load("Map1.tmx");
         mapRenderer = new OrthogonalTiledMapRenderer(map, UNIT_SCALE);
@@ -100,5 +105,6 @@ public class Gamemain implements Screen {
         player.dispose();
         map.dispose();
         mapRenderer.dispose();
+        back.dispose();
     }
 }
