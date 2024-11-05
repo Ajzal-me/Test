@@ -5,46 +5,85 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 
 public class Gamemain implements Screen {
     private Player player;
     private SpriteBatch batch;
     private OrthographicCamera camera;
     private Game game;
-    private Texture top;
+    private TiledMap map;
+    private OrthogonalTiledMapRenderer mapRenderer;
+
+    private final float UNIT_SCALE = 1/32f;
+    private float mapWidth;
+    private float mapHeight;
 
     public Gamemain(Game game) {
         this.game = game;
         batch = new SpriteBatch();
+
+        // Load map
+        map = new TmxMapLoader().load("Map1.tmx");
+        mapRenderer = new OrthogonalTiledMapRenderer(map, UNIT_SCALE);
+
+        // Get map dimensions
+        mapWidth = map.getProperties().get("width", Integer.class)-6.55f;
+        mapHeight = map.getProperties().get("height", Integer.class);
+
+        // Set up camera
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        player = new Player(120, 130);
-        top = new Texture("Top View Main (1).png");
+        camera.setToOrtho(false, 25, 15);
+
+        // Start player position
+        player = new Player(10, 10);
     }
-    public void render(float delta) {
-        ScreenUtils.clear(0, 0, 0, 1);
-        player.update(Gdx.graphics.getDeltaTime());
-        camera.position.set(player.getPosition().x + 16, player.getPosition().y + 16, 0);
-        camera.update();
-        batch.setProjectionMatrix(camera.combined); // Set the projection matrix for the batch
-        if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
-        {
-            game.setScreen(new Main(game));
-        }
-        batch.begin();
-        player.render(batch);
-        batch.draw(top,0,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
-        batch.end();
-    }
-    @Override
-    public void show() {}
 
     @Override
-    public void resize(int width, int height) {
+    public void render(float delta) {
+        ScreenUtils.clear(0, 0, 0, 1);
+
+        // Update player
+        player.update(Gdx.graphics.getDeltaTime());
+
+        // Clamp player to map bounds
+        player.getPosition().x = MathUtils.clamp(player.getPosition().x, 1, mapWidth - 2);
+        player.getPosition().y = MathUtils.clamp(player.getPosition().y, 1, mapHeight - 2);
+
+        // Update and clamp camera
+        camera.position.x = MathUtils.clamp(player.getPosition().x,
+            camera.viewportWidth / 2,
+            mapWidth - camera.viewportWidth / 2);
+        camera.position.y = MathUtils.clamp(player.getPosition().y,
+            camera.viewportHeight / 2,
+            mapHeight - camera.viewportHeight / 2);
+        camera.update();
+
+        // Render
+        mapRenderer.setView(camera);
+        mapRenderer.render();
+
+        batch.setProjectionMatrix(camera.combined);
+        batch.begin();
+        player.render(batch);
+        batch.end();
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            game.setScreen(new Main(game));
+        }
     }
+
+    @Override
+    public void resize(int width, int height) {}
+
+    @Override
+    public void show() {}
 
     @Override
     public void pause() {}
@@ -59,5 +98,7 @@ public class Gamemain implements Screen {
     public void dispose() {
         batch.dispose();
         player.dispose();
+        map.dispose();
+        mapRenderer.dispose();
     }
 }

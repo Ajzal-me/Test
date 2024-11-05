@@ -108,25 +108,16 @@ public class Main implements Screen{
     public void render(float delta) {
         ScreenUtils.clear(0, 0, 0, 1);
 
-        // Set the camera to adapt to viewport changes
-        //batch.setProjectionMatrix(viewport.getCamera().combined);
-
-        // Start drawing
         batch.begin();
         batch.draw(backgroundTexture, 8, 0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         batch.end();
 
-
-        // Draw stage elements if needed
         stage.act(delta);
         stage.draw();
     }
 
     @Override
-    public void resize(int width, int height) {
-        // Update viewport when window is resized, without changing aspect ratio
-        //viewport.update(width, height,true);
-    }
+    public void resize(int width, int height) {}
 
     @Override
     public void pause() {}
