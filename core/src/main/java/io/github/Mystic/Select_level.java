@@ -13,11 +13,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.audio.Sound;
-
+import com.badlogic.gdx.audio.Music;
 
 public class Select_level implements Screen {
 
     private Sound click;
+    private Music back;
 
     private SpriteBatch batch;
     private Texture backgroundtexture;
@@ -44,6 +45,9 @@ public class Select_level implements Screen {
     Select_level(Game game)
     {
             click = Gdx.audio.newSound(Gdx.files.internal("Click.mp3"));
+            back = Gdx.audio.newMusic(Gdx.files.internal("Background_menu.mp3"));
+            back.setLooping(true);
+            back.play();
 
             batch = new SpriteBatch();
             viewport = new ScreenViewport();
@@ -134,6 +138,7 @@ public class Select_level implements Screen {
                 {
                     System.out.println("I am mainback");
                     click.play();
+                    back.stop();
                     game.setScreen(new Main(game));
                 }
             });

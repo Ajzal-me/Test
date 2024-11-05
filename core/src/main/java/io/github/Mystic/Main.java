@@ -81,7 +81,7 @@ public class Main implements Screen{
                 public void clicked(InputEvent event, float x, float y)
                 {
                         System.out.println("I am being Clicked(play)");
-                       click.play();
+                        click.play();
                        backgroundMusic.stop();
                         game.setScreen(new Gamemain(game));
                 }
@@ -92,6 +92,7 @@ public class Main implements Screen{
                 {
                         System.out.println("I am also being clicked(select_level)");
                         click.play();
+                        backgroundMusic.stop();
                         game.setScreen(new Select_level(game));
                 }
         });
