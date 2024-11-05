@@ -12,8 +12,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.audio.Sound;
+
 
 public class Select_level implements Screen {
+
+    private Sound click;
+
     private SpriteBatch batch;
     private Texture backgroundtexture;
     private ScreenViewport viewport;
@@ -38,6 +43,8 @@ public class Select_level implements Screen {
     private static final float menuY = 60f;
     Select_level(Game game)
     {
+            click = Gdx.audio.newSound(Gdx.files.internal("Click.mp3"));
+
             batch = new SpriteBatch();
             viewport = new ScreenViewport();
             backgroundtexture = new Texture("SelectlevelBack.png");
@@ -86,6 +93,7 @@ public class Select_level implements Screen {
                public void clicked(InputEvent event,float x,float y)
                {
                     System.out.println("I am level1");
+                    click.play();
                }
             });
             level2.addListener(new ClickListener()
@@ -93,6 +101,7 @@ public class Select_level implements Screen {
                 public void clicked(InputEvent event,float x,float y)
                 {
                     System.out.println("I am level2");
+                    click.play();
                 }
             });
             level3.addListener(new ClickListener()
@@ -100,6 +109,7 @@ public class Select_level implements Screen {
                 public void clicked(InputEvent event,float x,float y)
                 {
                     System.out.println("I am level3");
+                    click.play();
                 }
             });
             level4.addListener(new ClickListener()
@@ -107,6 +117,7 @@ public class Select_level implements Screen {
                 public void clicked(InputEvent event,float x,float y)
                 {
                     System.out.println("I am level4");
+                    click.play();
                 }
             });
             level5.addListener(new ClickListener()
@@ -114,6 +125,7 @@ public class Select_level implements Screen {
                 public void clicked(InputEvent event,float x,float y)
                 {
                     System.out.println("I am level5");
+                    click.play();
                 }
             });
             menuback.addListener(new ClickListener()
@@ -121,6 +133,7 @@ public class Select_level implements Screen {
                 public void clicked(InputEvent event,float x,float y)
                 {
                     System.out.println("I am mainback");
+                    click.play();
                     game.setScreen(new Main(game));
                 }
             });
@@ -150,6 +163,7 @@ public class Select_level implements Screen {
         level5.remove();
         menuback.remove();
     }
+
     @Override
     public void show() {}
     @Override

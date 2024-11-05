@@ -2,6 +2,7 @@ package io.github.Mystic;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -13,8 +14,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.audio.Music;
 
 public class Main implements Screen{
+    private Music backgroundMusic;
+    private Sound click;
+
     private final SpriteBatch batch;
     private final Texture backgroundTexture;
     private final ScreenViewport viewport;
@@ -37,6 +43,12 @@ public class Main implements Screen{
     private static final float exitY = 230f;
 
     public Main(Game game) {
+
+        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("Background_menu.mp3"));
+        backgroundMusic.setLooping(true);
+        backgroundMusic.play();
+
+        click =  Gdx.audio.newSound(Gdx.files.internal("Click.mp3"));
 
         batch = new SpriteBatch();
         backgroundTexture = new Texture("main.jpg");
@@ -69,6 +81,7 @@ public class Main implements Screen{
                 public void clicked(InputEvent event, float x, float y)
                 {
                         System.out.println("I am being Clicked(play)");
+                       click.play();
                         game.setScreen(new Gamemain(game));
                 }
         });
@@ -77,6 +90,7 @@ public class Main implements Screen{
                 public void clicked(InputEvent event,float x,float y)
                 {
                         System.out.println("I am also being clicked(select_level)");
+                        click.play();
                         game.setScreen(new Select_level(game));
                 }
         });
@@ -84,7 +98,8 @@ public class Main implements Screen{
         {
                 public void clicked(InputEvent event,float x,float y)
                 {
-                        System.out.println("This is settings(settings)");
+                    System.out.println("This is settings(settings)");
+                    click.play();
                 }
         });
         exit.addListener(new ClickListener()
@@ -92,6 +107,7 @@ public class Main implements Screen{
                 public void clicked(InputEvent event,float x,float y)
                 {
                         Gdx.app.exit();
+                        click.play();
                 }
         });
 
@@ -137,6 +153,8 @@ public class Main implements Screen{
         select_level.remove();
         settings.remove();
         exit.remove();
+        backgroundMusic.dispose();
+        click.dispose();
 
     }
 }
