@@ -13,6 +13,8 @@ import com.badlogic.gdx.audio.Sound;
 public class Player {
 
     private Sound walk;
+    private Sound fire;
+
     private boolean isWalkingSoundPlaying = false;
     private Vector2 position;
     private float speed = 3f;
@@ -30,6 +32,12 @@ public class Player {
 
     public Player(float x, float y) {
         walk = Gdx.audio.newSound(Gdx.files.internal("Walk.mp3"));
+        fire = Gdx.audio.newSound(Gdx.files.internal("Fire.mp3"));
+
+        long f = fire.play();
+        fire.setLooping(f,true);
+        fire.setVolume(f,0.5f);
+
 
         position = new Vector2(x, y);
         walkRightAnimation = loadAnimation("Walk_Right", 2, false);  // Load right walk animation
@@ -127,6 +135,7 @@ public class Player {
             frame.getTexture().dispose();
         }
         walk.dispose();
+        fire.dispose();
     }
 
     private enum Direction {
