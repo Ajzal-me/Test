@@ -30,6 +30,7 @@ public class Player {
 
     public Player(float x, float y) {
         walk = Gdx.audio.newSound(Gdx.files.internal("Walk.mp3"));
+
         position = new Vector2(x, y);
         walkRightAnimation = loadAnimation("Walk_Right", 2, false);  // Load right walk animation
         walkLeftAnimation = loadAnimation("Walk_Right", 2, true);    // Load left walk as flipped version of right
@@ -75,9 +76,13 @@ public class Player {
 
         // Check if player is moving and play/stop sound accordingly
         if ((isMovingHorizontally || isMovingVertically) && !isWalkingSoundPlaying) {
+            long id = walk.play();
+            walk.setVolume(id,1f);
             walk.loop();// Start or loop the walking sound
             isWalkingSoundPlaying = true;
         } else if (!isMovingHorizontally && !isMovingVertically && isWalkingSoundPlaying) {
+            long id = walk.play();
+            walk.setVolume(id,1f);
             walk.stop();  // Stop the walking sound
             isWalkingSoundPlaying = false;
         }

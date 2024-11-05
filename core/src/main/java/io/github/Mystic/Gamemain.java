@@ -15,6 +15,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.audio.Music;
 
 public class Gamemain implements Screen {
+
     private Music back;
     private Player player;
     private SpriteBatch batch;
@@ -80,6 +81,7 @@ public class Gamemain implements Screen {
         batch.end();
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+           back.stop();
             game.setScreen(new Main(game));
         }
     }
