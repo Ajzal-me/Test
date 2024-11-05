@@ -7,7 +7,7 @@ public class Mystic_Trails extends Game {
     @Override
     public void create() {
 
-        setScreen(new Gamemain(this));
+        setScreen(new Main(this));
     }
 
     @Override
