@@ -102,6 +102,7 @@ public class Main implements Screen{
                 {
                     System.out.println("This is settings(settings)");
                     click.play();
+                    game.setScreen(new Settings(game, backgroundMusic));
                 }
         });
         exit.addListener(new ClickListener()

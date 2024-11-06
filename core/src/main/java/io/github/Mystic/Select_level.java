@@ -98,6 +98,7 @@ public class Select_level implements Screen {
                {
                     System.out.println("I am level1");
                     click.play();
+                    game.setScreen(new Gamemain(game));
                }
             });
             level2.addListener(new ClickListener()
