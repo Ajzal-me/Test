@@ -112,8 +112,8 @@ public class Gamemain implements Screen {
         batch.end();
 
         // Render lighting
-        rayHandler.setCombinedMatrix(camera);
-        rayHandler.updateAndRender();
+        //rayHandler.setCombinedMatrix(camera);
+        //rayHandler.updateAndRender();
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             game.setScreen(new Main(game));

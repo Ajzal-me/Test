@@ -21,7 +21,6 @@ public class Settings implements Screen {
     Settings(Game game){
 
 
-
     }
 
     @Override
